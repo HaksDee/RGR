@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="../styles/navigation.css" />
+        <link rel="stylesheet" href="../styles/conc.css" />
+        <title>PYROKINESIS</title>
+    </head>
+    <body>
+        <script>
+            let isAlertShow = sessionStorage.getItem('isAlertShow');
+            if(!isAlertShow)
+            {
+                let name = prompt('Введите ваше имя');
+                alert(`Добро пожаловать, ${name}`);
+                sessionStorage.setItem('isAlertShow', true);
+            }
+        </script>
+        <header class="header">
+            <div class = "header_div">
+                <div class = "company_name">
+                    PYROKINESIS
+                </div>
+                <div class ="post-title-line"></div>
+                <div class = "navigation">
+                    <a href="../index.html" class="navigation_item">Главная</a>
+                    <a href="bio.html" class="navigation_item">Биография</a>
+                    <a href="concerts.html" class="navigation_item active">Концерты</a>
+                    <a href="buy.html" class="navigation_item">Покупка</a>
+                    <a href="tickets.html" class="navigation_item">Билеты</a>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="main_div">
+                <div class="main_desc">
+                    <div class="image_div">
+                        <img src="../images/4.jpg" class="conc_img">
+                    </div>
+                    <div class="">
+                        <p>Камерная тусовка в Воронеже! Клуб <b>"AURA"</b> по адресу проспект Революции, 56. Максимально ламповые треки и общение. Закупайтесь билетами!</p>
+                    </div>
+                    <div class="">
+                        <b>2 900</b> рублей
+                    </div>
+                    <a href="buy.html" class="">Закупиться!</a>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

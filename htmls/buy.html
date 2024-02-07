@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="../styles/navigation.css" />
+        <link rel="stylesheet" href="../styles/buy.css" />
+        <title>PYROKINESIS</title>
+    </head>
+    <body>
+        <script>
+            let isAlertShow = sessionStorage.getItem('isAlertShow');
+            if(!isAlertShow)
+            {
+                let name = prompt('Введите ваше имя');
+                alert(`Добро пожаловать, ${name}`);
+                sessionStorage.setItem('isAlertShow', true);
+            }
+        </script>
+        <header class="header">
+            <div class = "header_div">
+                <div class = "company_name">
+                    PYROKINESIS
+                </div>
+                <div class ="post-title-line"></div>
+                <div class = "navigation">
+                    <a href="../index.html" class="navigation_item">Главная</a>
+                    <a href="bio.html" class="navigation_item">Биография</a>
+                    <a href="concerts.html" class="navigation_item">Концерты</a>
+                    <a href="buy.html" class="navigation_item active">Покупка</a>
+                    <a href="tickets.html" class="navigation_item">Билеты</a>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="main_div">
+                <div class="main_desc">
+                    <h1>Приобрести билет</h1>
+                    <div class="form__field">
+                        <label for="surname">Фамилия:</label>
+                        <input 
+                            type="text"
+                            id="surname"
+                            placeholder="Введите вашу фамилию"
+                        />
+                    </div>
+                    <div class="form__field">
+                        <label for="firstname">Имя:</label>
+                        <input 
+                            type="text"
+                            id="firstname"
+                            placeholder="Введите ваше имя"
+                        />
+                    </div>
+                    <div class="form__field">
+                        <label for="secondname">Отчество:</label>
+                        <input
+                            type="text"
+                            id="secondname"
+                            placeholder="Введите ваше отчество"
+                        />
+                    </div>
+                    <div class="form__field">
+                        <label for="phone">Телефон:</label>
+                        <input 
+                            type="phone"
+                            id="phone"
+                            placeholder="Введите ваш номер телефона"
+                        />
+                    </div>
+                    <div class="form__field">
+                        <label for="city">Город:</label>
+                        <select name="cityes" id="city">
+                            <option value="">Выберите город</option>
+                            <option value="Москва">Москва</option>
+                            <option value="Санкт-Петербург">Санкт-Петербург</option>
+                            <option value="Казань">Казань</option>
+                            <option value="Воронеж">Воронеж</option>
+                        </select>
+                    </div>
+                    <button type="button" onclick="submit()">
+                        Оформить
+                    </button>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
+<script lang="javascript">
+    const url = 'https://pyro-server.onrender.com'
+    const submit = async() => {
+        let firstname = document.getElementById('firstname').value;
+        let surname = document.getElementById('surname').value;
+        let secondname = document.getElementById('secondname').value;
+        let phone = document.getElementById('phone').value;
+        let city = document.getElementById('city').value;
+        if(validate(firstname, surname, secondname, phone, city))
+        {
+            let user = 
+            {
+                firstName: firstname,
+                surName: surname,
+                secondName: secondname,
+                phone: phone,
+                city: city,
+            };
+            try 
+            {
+                let response = await fetch(url, 
+                {
+                    method: 'POST',
+                    headers: 
+                    {
+                        'Content-Type': 'application/json;charset=utf-8',
+                    },
+                    body: JSON.stringify(user),
+                });
+                if (response.ok) 
+                {
+                    alert('Билет успешно приобретен, перенаправляем на страницу билетов')
+                    setTimeout(() => 
+                    {
+                        window.open('tickets.html', '_self');
+                    }, 3000);
+                } else 
+                {
+                    alert('Произошла ошибка на сервере')
+                }
+            } catch (error) 
+            {
+                alert('Ошибка ' + error)
+            }
+        }
+    }
+
+    const validate = (firstname, surname, secondname, phone, city) => 
+    {
+        if(firstname.trim() == '')
+        {
+            alert('Вы не указали имя')
+            return false;
+        }
+        if(surname.trim() == '')
+        {
+            alert('Вы не указали фамилию')
+            return false;
+        }
+        if(secondname.trim() == '')
+        {
+            alert('Вы не указали отчество')
+            return false;
+        }
+        if(name && name[0].toUpperCase() !== name[0])
+        {
+            alert('Имя должно быть написано с большой буквы')
+            return false;
+        }
+        if(surname && surname[0].toUpperCase() !== surname[0])
+        {
+            alert('Фамилия должна быть написана с большой буквы')
+            return false;
+        }
+        if(secondname && secondname[0].toUpperCase() !== secondname[0])
+        {
+            alert('Отчество должно быть написано с большой буквы')
+            return false;
+        }
+        let isPhoneNumber = new RegExp(/(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g);
+        if (!isPhoneNumber.test(phone))
+        {
+            alert('Неверно указан номер телефона');
+            return false;
+        }
+        if(city == '')
+        {
+            alert('Выберите город')
+            return false;
+        }
+        return true
+    }
+</script>

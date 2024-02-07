@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
+        <link rel="stylesheet" href="../styles/navigation.css" />
+        <link rel="stylesheet" href="../styles/tickets.css" />
+        <title>PYROKINESIS</title>
+    </head>
+    <body>
+        <script>
+            let isAlertShow = sessionStorage.getItem('isAlertShow');
+            if(!isAlertShow)
+            {
+                let name = prompt('Введите ваше имя');
+                alert(`Добро пожаловать, ${name}`);
+                sessionStorage.setItem('isAlertShow', true);
+            }
+        </script>
+        <header class="header">
+            <div class = "header_div">
+                <div class = "company_name">
+                    PYROKINESIS
+                </div>
+                <div class ="post-title-line"></div>
+                <div class = "navigation">
+                    <a href="../index.html" class="navigation_item">Главная</a>
+                    <a href="bio.html" class="navigation_item">Биография</a>
+                    <a href="concerts.html" class="navigation_item">Концерты</a>
+                    <a href="buy.html" class="navigation_item">Покупка</a>
+                    <a href="tickets.html" class="navigation_item active">Билеты</a>
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="main_div" id="orders"></div>
+        </main>
+    </body>
+</html>
+<script lang="javascript">
+    const renderOrders = async () => {
+      await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json;charset=utf-8",
+            },
+        })
+        .then((response) => response.json())
+        .then((orders) => {
+        let innerHTML = ``;
+        orders.forEach((order) => {
+                innerHTML += `<div class="main_desc">
+                <div class="orders__row">
+                    <span style="font-weight: 700">Город:  </span>${order.city}
+                </div>
+                <div class="orders__row">
+                    <span style="font-weight: 700">ФИО:  </span>${order.surName} ${order.firstName} ${order.secondName}
+                </div>
+                <div class="orders__row">
+                    <span style="font-weight: 700">Телефон:  </span>${order.phone}
+                </div>
+                    <button id="delete__button" onclick="deleteOrder('${order._id}')"> Удалить заявку</button>
+                </div>`;
+            });
+          document.getElementById("orders").innerHTML = innerHTML;
+        });
+    };
+
+
+    const deleteOrder = async (id) => 
+    {
+        try 
+        {
+            let response = await fetch(url + `${id}`, 
+            {
+                method: "DELETE",
+                headers: {"Content-Type": "application/json;charset=utf-8",},
+            }); 
+            if (response.ok) 
+            {
+                await renderOrders();
+            } else 
+                {
+                    alert("Ошибка запроса");
+                }
+        } catch (error) 
+            {
+            alert("Ошибка запроса " + error);
+            }
+    };
+    let url = "https://pyro-server.onrender.com/";
+    renderOrders();
+</script>
